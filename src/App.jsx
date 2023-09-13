@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react'
-import { redirect, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
 import raw from './utils/wordCatalog.txt';
 import './App.css'
 import Box from './components/Box';
 
 function App() {
   const [word, setWord] = useState("");
+  console.log("🚀 ~ file: App.jsx:10 ~ App ~ word:", word)
+  const navigate = useNavigate();
   
   useEffect(() => {
-    if (!localStorage.getItem('firstVisit')) {
-      // Mostrar modal de instrucciones
+    if (localStorage.getItem('firstVisit') !== 'true') {
+      navigate('/instructions')
       localStorage.setItem('firstVisit', 'true');
-    } else {
-      redirect('/instructions')
     }
   }, []);
   
-  useEffect(() => {    
+  useEffect(() => {
     const fetchRandomWord = () => {
       fetch(raw)
         .then((response) => response.text())
@@ -50,8 +51,8 @@ function App() {
  
   return (
     <>
-      <Box word={word} />
       <Link to="/instructions">Ir a instrucciones</Link>
+      <Box word={word} />
     </>
   )
 }

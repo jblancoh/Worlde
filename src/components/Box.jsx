@@ -10,6 +10,10 @@ export default function Box({ word }) {
   const [rows, setRows] = useState(initialRows);
   const [position, setPosition] = useState(0);
   const [attempts, setAttempts] = useState(0); 
+  const [finished, setFinished] = useState(false);
+  const [isWinner, setIsWinner] = useState(false);
+  const [won, setWon] = useState(Number(localStorage.getItem('won')));
+  const [lost, setLost] = useState(Number(localStorage.getItem('lost')));
   
   const handleInput = (letter) => {
     if (position < 5) {
@@ -28,24 +32,28 @@ export default function Box({ word }) {
     let newColorArray = [];
     for (let i = 0; i < 5; i++) {
       if (rows[attempts].inputWord[i] === word[i]) {
-        newColorArray.push('green');
+        newColorArray.push('bg-green-400');
+       
       } else if (word.includes(rows[attempts].inputWord[i])) {
-        newColorArray.push('yellow');
+        newColorArray.push('bg-yellow-400');
       } else {
-        newColorArray.push('gray');
+        newColorArray.push('bg-gray-400');
       }
+    }
+    if (rows[attempts].inputWord === word) {
+      setFinished(true)
+      localStorage.setItem('won', won + 1);
+      return setIsWinner(true);
     }
     const newRow = { ...rows[attempts], colorArray: newColorArray };
     const newRows = [...rows];
     newRows[attempts] = newRow;
     setRows(newRows);
     if (attempts >= 4) {
-      // Mostrar modal de estadísticas y reiniciar
-      
-      // ...
+      setFinished(true)
+      localStorage.setItem('lost', lost + 1);
     } else {
       setAttempts(attempts + 1);
-     
       setPosition(0);
     }
   };
@@ -58,7 +66,7 @@ export default function Box({ word }) {
   }, [position]);
   
   return (
-    <div className="flex flex-col justify-between gap-2">
+    <div className="flex flex-col justify-between gap-8">
       <div className="flex flex-col justify-center">
         {rows.map((row, index) => (
           <div key={index} className="flex flex-row justify-center">
@@ -69,6 +77,7 @@ export default function Box({ word }) {
         ))}
       </div>
       <QwertyKyb handleInput={handleInput} />
+      {isWinner && <div className="text-2xl text-center"> You are the winner! {word}</div>}
     </div>
   );
 }
