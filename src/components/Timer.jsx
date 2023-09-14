@@ -6,11 +6,16 @@ const FormatTime = ({time}) => {
   const minutes = Math.floor(time / 60);
   const secondsLeft = time % 60;
   
-  return <span>
-    {
-      `${minutes < 10 ? '0' : ''}${minutes}:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`
-    }
-  </span>
+  return <div className="flex flex-col items-center text-sm p-10">
+    <span>
+      SIGUIENTE PALABRA
+    </span>
+    <span className="font-bold">
+      {
+        `${minutes < 10 ? '0' : ''}${minutes}:${secondsLeft < 10 ? '0' : ''}${secondsLeft}`
+      }
+    </span>
+  </div>
 }
 
 export default function Timer ({date}) {

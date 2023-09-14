@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
 import Stats from "./Stats";
+import Instructions from "./Instructions";
 import LetterBox from "./LetterBox";
 import QwertyKyb from "./QuertyKYB";
 import { useEffect } from "react";
@@ -17,6 +18,7 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
   const [won, setWon] = useState(Number(localStorage.getItem('won')));
   const [lost, setLost] = useState(Number(localStorage.getItem('lost')));
   const [isFinished, setIsFinished] = useState(false);
+  const [openInstructionModal, setOpenInstructionModal] = useState(false);
   
   const handleInput = (letter) => {
     if (position < 5) {
@@ -94,10 +96,18 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
     }
   };
   
+  useEffect(() => {
+    if (localStorage.getItem('firstVisit') !== 'true') {
+      setOpenInstructionModal(true);
+      localStorage.setItem('firstVisit', 'true');
+    }
+  }, []);
+  
   return (
     <div className='h-screen grid grid-flow-row place-items-stretch gap-8 container mx-auto'>
       <Header 
         onStatsClick={setOpenModal}
+        onInstructionsClick={setOpenInstructionModal}
       />
       <div className="flex flex-col justify-between gap-8">
         <div className="flex flex-col justify-center">
@@ -124,8 +134,15 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
                 won={won}
                 lost={lost} 
                 date={date}
+                onClose={onCloseModal}
               />
           }
+        </Modal>
+        <Modal
+          open={openInstructionModal}
+          onClose={() => setOpenInstructionModal(false)}
+        >
+          <Instructions onClose={() => setOpenInstructionModal(false)}/>
         </Modal>
       </div>
     </div>

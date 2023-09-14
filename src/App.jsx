@@ -1,6 +1,4 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useNavigate } from "react-router-dom";
-
 import raw from './utils/wordCatalog.txt';
 import Box from './components/Box';
 
@@ -10,14 +8,6 @@ function App() {
   const [word, setWord] = useState("");
   const [isReset, setIsReset] = useState(false);
   const [date, setDate] = useState(new Date());
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (localStorage.getItem('firstVisit') !== 'true') {
-      navigate('/instructions')
-      localStorage.setItem('firstVisit', 'true');
-    }
-  }, []);
   
   useEffect(() => {
     fetchRandomWord();
