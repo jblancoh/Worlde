@@ -6,10 +6,11 @@ const qwerty = [
   ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
 ];
 
-export default function QwertyKyb ({ handleInput }) {
+export default function QwertyKyb({ handleInput, disabled }) {
   
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (disabled) return;
       const key = e.key.toUpperCase();
       if (qwerty.flat().includes(key)) {
         handleInput(key);
@@ -28,7 +29,7 @@ export default function QwertyKyb ({ handleInput }) {
       {qwerty.map((row, index) => (
         <div key={index} className="flex flex-row gap-2">
           {row.map((letter, index) => (
-            <button key={index} className="w-12 h-12 bg-gray-300 rounded-md text-black" onClick={() => handleInput(letter)}>{letter}</button>
+            <button disabled={disabled} key={index} className="w-12 h-12 bg-gray-300 rounded-md text-black" onClick={() => handleInput(letter)}>{letter}</button>
           ))}
         </div>
       ))}
@@ -38,4 +39,5 @@ export default function QwertyKyb ({ handleInput }) {
 
 QwertyKyb.propTypes = {
   handleInput: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };

@@ -27,7 +27,7 @@ export default function Timer ({date}) {
     const seconds = Math.floor(diff / 1000);
     setSeconds(seconds);
     const interval = setInterval(() => {
-      setSeconds(seconds => seconds - 1);
+      setSeconds(seconds => seconds > 0 ? seconds - 1 : 0);
     }, 1000);
     return () => clearInterval(interval);
   }, [date]);
