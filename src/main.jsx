@@ -6,16 +6,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
-import Instructions from './components/Instructions.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "/instructions",
-    element: <Instructions />,
   },
 ]);
 
