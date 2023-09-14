@@ -23,7 +23,7 @@ export default function Stats({ isWinner = false, isFinished = false, word = '',
         <div className="flex flex-col justify-center items-center gap-1">
           {
             isFinished &&
-              <div className="text-sm text-center">{isWinner ? 'Ganaste!' : `La palabra era: ${word}`}</div>
+            <div className="text-sm text-center">{isWinner ? '¡Ganaste!' : `La palabra era: ${word}`}</div>
           }
           <Timer date={date}/>
           <button className="bg-green-400  text-white font-bold rounded-md px-4 py-2" onClick={onClose}>Aceptar</button>

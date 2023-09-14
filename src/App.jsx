@@ -7,11 +7,13 @@ const TIME_TO_RESET = 300000;
 function App() {
   const [word, setWord] = useState("");
   const [isReset, setIsReset] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date(localStorage.getItem('date')));
   
   useEffect(() => {
-    fetchRandomWord();
-    
+    if (date && date.getTime() < new Date().getTime()) {
+      fetchRandomWord();
+    } 
+
     const wordInterval = setInterval(() => {
       setIsReset(false)
       fetchRandomWord();
@@ -36,7 +38,9 @@ function App() {
           const accentIndex = accents.indexOf(letter);
           return accentIndex !== -1 ? accentsOut[accentIndex] : letter;
         }).join('');
-        setDate(new Date(new Date().getTime() + TIME_TO_RESET));
+        const dateRest = new Date(new Date().getTime() + TIME_TO_RESET);
+        setDate(dateRest);
+        localStorage.setItem('date', dateRest);
         setWord(wordWithoutAccents);
       })
       .catch((error) => {
