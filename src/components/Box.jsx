@@ -102,7 +102,7 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
       localStorage.setItem('firstVisit', 'true');
     }
   }, []);
-  
+
   return (
     <div className='h-screen grid grid-flow-row place-items-stretch gap-8 container mx-auto'>
       <Header 
@@ -119,8 +119,8 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
             </div>
           ))}
         </div>
-        <QwertyKyb handleInput={handleInput} />
-        {isWinner && <div className="text-2xl text-center"> You are the winner! {word}</div>}
+        {!word && <div className="text-2xl text-center">Esperando la siguiente palabra</div>}
+        <QwertyKyb handleInput={handleInput} disabled={!word}/>
         <Modal
           open={openModal}
           onClose={onCloseModal}
