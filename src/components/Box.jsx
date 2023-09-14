@@ -7,6 +7,7 @@ import QwertyKyb from "./QuertyKYB";
 import { useEffect } from "react";
 import Modal from "./Modal";
 import Header from "./Header";
+import Timer from "./Timer";
 
 export default function Box({ word, isReset, fetchRandomWord, date}) {
   const initialRows = Array(5).fill({ inputWord: '_____', colorArray: [] });
@@ -119,7 +120,9 @@ export default function Box({ word, isReset, fetchRandomWord, date}) {
             </div>
           ))}
         </div>
-        {!word && <div className="text-2xl text-center">Esperando la siguiente palabra</div>}
+        {!word && <div>
+          <Timer date={date}/>
+        </div>}
         <QwertyKyb handleInput={handleInput} disabled={!word}/>
         <Modal
           open={openModal}
