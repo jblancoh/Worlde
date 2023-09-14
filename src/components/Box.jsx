@@ -33,7 +33,7 @@ export default function Box({ word }) {
     for (let i = 0; i < 5; i++) {
       if (rows[attempts].inputWord[i] === word[i]) {
         newColorArray.push('bg-green-400');
-       
+        
       } else if (word.includes(rows[attempts].inputWord[i])) {
         newColorArray.push('bg-yellow-400');
       } else {
@@ -69,9 +69,9 @@ export default function Box({ word }) {
     <div className="flex flex-col justify-between gap-8">
       <div className="flex flex-col justify-center">
         {rows.map((row, index) => (
-          <div key={index} className="flex flex-row justify-center">
+          <div key={index} className="flex flex-row justify-center gap-1">
             {row.inputWord.split("").map((letter, i) => (
-              <LetterBox key={i} letter={letter !== '_' ? letter : ''} color={row.colorArray[i]} />
+              <LetterBox key={i} letter={letter !== '_' ? letter : ''} color={row.colorArray[i]} className="text-white font-bold"/>
             ))}
           </div>
         ))}

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import raw from './utils/wordCatalog.txt';
-import './App.css'
 import Box from './components/Box';
+import Header from './components/Header';
 
 function App() {
   const [word, setWord] = useState("");
@@ -50,10 +50,14 @@ function App() {
   
  
   return (
-    <>
-      <Link to="/instructions">Ir a instrucciones</Link>
-      <Box word={word} />
-    </>
+    
+    <div className='bg-white dark:bg-slate-800  text-slate-800 dark:text-white'>
+      <div className='h-screen grid grid-flow-row place-items-stretch gap-8 container mx-auto'>
+        <Header />
+        <Box word={word} />
+      </div>
+      
+    </div>
   )
 }
 

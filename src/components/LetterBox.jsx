@@ -1,9 +1,9 @@
 
 import PropTypes from 'prop-types';
 
-export default function LetterBox ({ letter, color}) {
+export default function LetterBox({ letter, color, className = "" }) {
   return (
-    <div className={`${color} w-12 h-12 border border-black flex justify-center items-center`}>
+    <div className={`${color || 'bg-gray-200'} w-12 h-12 rounded-md flex justify-center items-center mb-1  ${className}`}>
       {letter}
     </div>
   );
@@ -11,5 +11,6 @@ export default function LetterBox ({ letter, color}) {
 
 LetterBox.propTypes = {
   letter: PropTypes.string.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  className: PropTypes.string,
 };
