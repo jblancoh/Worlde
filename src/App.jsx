@@ -13,11 +13,16 @@ function App() {
     if (date && date.getTime() < new Date().getTime()) {
       fetchRandomWord();
     } 
+    
+    const now = new Date();
+    const diff = date - now;
 
     const wordInterval = setInterval(() => {
+
       setIsReset(false)
       fetchRandomWord();
-    }, TIME_TO_RESET);
+    }, diff);
+
 
     return () => {
       clearInterval(wordInterval);
@@ -26,6 +31,7 @@ function App() {
   }, [isReset]);
   
   const fetchRandomWord = useCallback(() => {
+
     return fetch(raw)
       .then((response) => response.text())
       .then((data) => {
