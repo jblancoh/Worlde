@@ -28,7 +28,7 @@ export default function QwertyKyb ({ handleInput }) {
       {qwerty.map((row, index) => (
         <div key={index} className="flex flex-row gap-2">
           {row.map((letter, index) => (
-            <button key={index} className="w-12 h-12 bg-gray-300 rounded-md " onClick={() => handleInput(letter)}>{letter}</button>
+            <button key={index} className="w-12 h-12 bg-gray-300 rounded-md text-black" onClick={() => handleInput(letter)}>{letter}</button>
           ))}
         </div>
       ))}

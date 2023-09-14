@@ -1,19 +1,22 @@
 import { useState } from "react";
 import PropTypes from 'prop-types';
-
+import Stats from "./Stats";
 import LetterBox from "./LetterBox";
 import QwertyKyb from "./QuertyKYB";
 import { useEffect } from "react";
+import Modal from "./Modal";
+import Header from "./Header";
 
-export default function Box({ word }) {
+export default function Box({ word, isReset, fetchRandomWord, date}) {
   const initialRows = Array(5).fill({ inputWord: '_____', colorArray: [] });
   const [rows, setRows] = useState(initialRows);
   const [position, setPosition] = useState(0);
   const [attempts, setAttempts] = useState(0); 
-  const [finished, setFinished] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [isWinner, setIsWinner] = useState(false);
   const [won, setWon] = useState(Number(localStorage.getItem('won')));
   const [lost, setLost] = useState(Number(localStorage.getItem('lost')));
+  const [isFinished, setIsFinished] = useState(false);
   
   const handleInput = (letter) => {
     if (position < 5) {
@@ -41,8 +44,11 @@ export default function Box({ word }) {
       }
     }
     if (rows[attempts].inputWord === word) {
-      setFinished(true)
+      setOpenModal(true)
       localStorage.setItem('won', won + 1);
+      setWon(won + 1);
+      fetchRandomWord();
+      setIsFinished(true);
       return setIsWinner(true);
     }
     const newRow = { ...rows[attempts], colorArray: newColorArray };
@@ -50,8 +56,10 @@ export default function Box({ word }) {
     newRows[attempts] = newRow;
     setRows(newRows);
     if (attempts >= 4) {
-      setFinished(true)
+      setOpenModal(true)
       localStorage.setItem('lost', lost + 1);
+      setLost(lost + 1);
+      setIsFinished(true);
     } else {
       setAttempts(attempts + 1);
       setPosition(0);
@@ -65,23 +73,68 @@ export default function Box({ word }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position]);
   
+  useEffect(() => {
+    if (isReset) {
+      handleReset()
+      setIsFinished(false);
+    }
+  }, [isReset]);
+  
+  const handleReset = () => {
+    setRows(initialRows);
+    setPosition(0);
+    setAttempts(0);
+    setIsWinner(false);
+  };
+  
+  const onCloseModal = () => {
+    setOpenModal(false);
+    if(isFinished && isWinner) {
+      handleReset();
+    }
+  };
+  
   return (
-    <div className="flex flex-col justify-between gap-8">
-      <div className="flex flex-col justify-center">
-        {rows.map((row, index) => (
-          <div key={index} className="flex flex-row justify-center gap-1">
-            {row.inputWord.split("").map((letter, i) => (
-              <LetterBox key={i} letter={letter !== '_' ? letter : ''} color={row.colorArray[i]} className="text-white font-bold"/>
-            ))}
-          </div>
-        ))}
+    <div className='h-screen grid grid-flow-row place-items-stretch gap-8 container mx-auto'>
+      <Header 
+        onStatsClick={setOpenModal}
+      />
+      <div className="flex flex-col justify-between gap-8">
+        <div className="flex flex-col justify-center">
+          {rows.map((row, index) => (
+            <div key={index} className="flex flex-row justify-center gap-1">
+              {row.inputWord.split("").map((letter, i) => (
+                <LetterBox key={i} letter={letter !== '_' ? letter : ''} color={row.colorArray[i]} className="text-black font-bold"/>
+              ))}
+            </div>
+          ))}
+        </div>
+        <QwertyKyb handleInput={handleInput} />
+        {isWinner && <div className="text-2xl text-center"> You are the winner! {word}</div>}
+        <Modal
+          open={openModal}
+          onClose={onCloseModal}
+        >
+          {
+            openModal &&
+              <Stats 
+                isWinner={isWinner}
+                isFinished={isFinished}
+                word={word}
+                won={won}
+                lost={lost} 
+                date={date}
+              />
+          }
+        </Modal>
       </div>
-      <QwertyKyb handleInput={handleInput} />
-      {isWinner && <div className="text-2xl text-center"> You are the winner! {word}</div>}
     </div>
   );
 }
 
 Box.propTypes = {
   word: PropTypes.string.isRequired,
+  isReset: PropTypes.bool,
+  fetchRandomWord: PropTypes.func.isRequired,
+  date: PropTypes.instanceOf(Date),
 };
